@@ -1,6 +1,7 @@
 package com.kim.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kim.common.bean.User;
+
 import java.util.LinkedList;
 
 public class RecentChatAdapter extends BaseAdapter {
@@ -17,33 +20,26 @@ public class RecentChatAdapter extends BaseAdapter {
 	private LinkedList<RecentChatEntity> list;
 	private MyApplication application;
 	private LayoutInflater inflater;
-	private int[] imgs = { R.drawable.icon, R.drawable.f1, R.drawable.f2,
-			R.drawable.f3, R.drawable.f4, R.drawable.f5, R.drawable.f6,
-			R.drawable.f7, R.drawable.f8, R.drawable.f9 };
 
 	public RecentChatAdapter(Context context, LinkedList<RecentChatEntity> list) {
-		// TODO Auto-generated constructor stub
 		this.context = context;
-		application = (MyApplication) context.getApplicationContext();
 		this.list = list;
+		application = (MyApplication) context.getApplicationContext();
 		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return list.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return list.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -54,7 +50,6 @@ public class RecentChatAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.recent_chat_item, null);
@@ -71,7 +66,6 @@ public class RecentChatAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		final RecentChatEntity entity = list.get(position);
-		holder.icon.setImageResource(imgs[entity.getImg()]);
 		holder.name.setText(entity.getName());
 		holder.name.setTextColor(Color.BLACK);
 		holder.date.setText(entity.getTime());
@@ -89,18 +83,17 @@ public class RecentChatAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println("kiim: start to chat!");
+				System.out.println("kiim: chat start to chat!");
 				// 下面是切换到聊天界面处理
-				/*User u = new User();
+				User u = new User();
 				u.setName(entity.getName());
 				u.setId(entity.getId());
-				u.setImg(entity.getImg());
 				Intent intent = new Intent(context, ChatActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra("user", u);
 				context.startActivity(intent);
 				// Toast.makeText(Tab2.this, "开始聊天", 0).show();
-				application.setRecentNum(0);*/
+				application.setRecentNum(0);
 
 			}
 		});

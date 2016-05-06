@@ -167,6 +167,7 @@ public class LoginActivity extends MyActivity implements OnClickListener {
 
             switch (msg.getType()) {
                 case LOGIN:// LoginActivity只处理登录的消息
+                    System.out.println("收到  "  + mAccounts.getText().toString() + "的消息!");
                     List<User> list = (List<User>) msg.getObject();
                     if (list.size() > 0) {
                         // 保存自己的信息

@@ -20,18 +20,16 @@ public class DButil {
 		try {
 			InputStream is = DButil.class.getClassLoader()
 					.getResourceAsStream("DB.properties");
-			// System.out.println(is.toString());
+
 			pro.load(is);
 			driver = pro.getProperty("driver");
 			url = pro.getProperty("url");
 			username = pro.getProperty("username");
 			password = pro.getProperty("password");
-//			 System.out.println(driver + ":" + url + ":" + username + ":"
-//			 + password);
+
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, username,
 					password);
-			System.out.println("conn success!!");
 			return conn;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

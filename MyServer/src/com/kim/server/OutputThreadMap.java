@@ -7,11 +7,9 @@ import java.util.Map;
 
 /**
  * 存放写线程的缓存器
- * 
- * @author way
  */
 public class OutputThreadMap {
-	private HashMap<Integer, OutputThread> map;
+	private HashMap<Integer, OutputThread> map; 	//所有在线用户
 	private static OutputThreadMap instance;
 
 	// 私有构造器，防止被外面实例化改对像
@@ -30,6 +28,8 @@ public class OutputThreadMap {
 	// 添加写线程的方法
 	public synchronized void add(Integer id, OutputThread out) {
 		map.put(id, out);
+		System.out.println("map 添加 用户 " + id + " 成功!");
+		System.out.println("map  当前大小：  " + map.size());
 	}
 
 	// 移除写线程的方法

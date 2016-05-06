@@ -22,9 +22,6 @@ public class MyPagerAdapter extends PagerAdapter {
 		((ViewPager) arg0).removeView(mListViews.get(arg1));
 	}
 
-	@Override
-	public void finishUpdate(View arg0) {
-	}
 
 	@Override
 	public int getCount() {
@@ -49,10 +46,6 @@ public class MyPagerAdapter extends PagerAdapter {
 	@Override
 	public Parcelable saveState() {
 		return null;
-	}
-
-	@Override
-	public void startUpdate(View arg0) {
 	}
 
 }

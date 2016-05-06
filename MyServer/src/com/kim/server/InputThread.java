@@ -74,11 +74,8 @@ public class InputThread extends Thread {
 			switch (read_tranObject.getType()) {
 			
 			case LOGIN:
-				User loginUser = (User) read_tranObject.getObject();
-				System.out.println("收到登录消息, 密码: " + loginUser.getPassword());
+				User loginUser = (User) read_tranObject.getObject();		
 				ArrayList<User> list = dao.login(loginUser);
-				System.out.println("0's id: " + list.get(0).getId());
-				System.out.println("1's id: " + list.get(0).getId());
 				TranObject<ArrayList<User>> login2Object = new TranObject<ArrayList<User>>(
 						TranObjectType.LOGIN);
 				if (list != null) {// 如果登录成功
@@ -90,7 +87,9 @@ public class InputThread extends Thread {
 					for (OutputThread onOut : map.getAll()) {
 						onOut.setMessage(onObject);// 广播一下用户上线
 					}
-					map.add(loginUser.getId(), out);// 先广播，再把对应用户id的写线程存入map中
+					map.add(list.get(0).getId(), out);// 先广播，再把对应用户id的写线程存入map中
+					 
+					
 					login2Object.setObject(list);// 把好友列表加入回复的对象中
 				} else {
 					login2Object.setObject(null);
@@ -104,9 +103,12 @@ public class InputThread extends Thread {
 
 			case MESSAGE:// 如果是转发消息（可添加群发）
 				// 获取消息中要转发的对象id，然后获取缓存的该对象的写线程
+				
 				int id2 = read_tranObject.getToUser();
+				System.out.println("收到 " + id2 +" 发送的消息！");
 				OutputThread toOut = map.getById(id2);
 				if (toOut != null) {// 如果用户在线
+					System.out.println("已发送消息给: " + id2); 
 					toOut.setMessage(read_tranObject);
 				} else {// 如果为空，说明用户已经下线,回复用户
 					/*TextMessage text = new TextMessage();

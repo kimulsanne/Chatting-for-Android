@@ -3,12 +3,10 @@ package com.kim.common.transObj;
 import java.io.Serializable;
 
 /**
- * 传输的对象,直接通过Socket传输的最大对象
+ * 传输的对象,直接通过Socket传输的对象
  */
 public class TranObject<T> implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private TranObjectType type;// 发送的消息类型

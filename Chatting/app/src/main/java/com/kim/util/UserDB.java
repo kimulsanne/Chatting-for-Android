@@ -17,11 +17,11 @@ public class UserDB {
 		helper = new DBHelper(context);
 	}
 
-	public User selectInfo(int id) {
+	public User selectInfo(int account) {
 		User u = new User();
 		SQLiteDatabase db = helper.getReadableDatabase();
-		Cursor c = db.rawQuery("select * from user where id=?",
-				new String[] { id + "" });
+		Cursor c = db.rawQuery("select * from user where account=?",
+				new String[] { account + "" });
 		if (c.moveToFirst()) {
 
 			u.setName(c.getString(c.getColumnIndex("name")));
@@ -31,8 +31,6 @@ public class UserDB {
 
 	public void addUser(List<User> list) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		User su = list.get(0);
-		System.out.println("kimm userdb:  " + su);
 		for (User u : list) {
 			db.execSQL(
 					"insert into user (id,account,name,online) values(?,?,?,?)",

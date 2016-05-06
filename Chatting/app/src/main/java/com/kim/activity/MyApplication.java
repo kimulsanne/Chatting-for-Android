@@ -14,6 +14,7 @@ public class MyApplication extends Application {
 	private boolean isClientStart;// 客户端连接是否启动
 	private NotificationManager mNotificationManager;
 	private int newMsgNum = 0;// 后台运行的消息
+	private RecentChatAdapter mRecentAdapter;
 	private LinkedList<RecentChatEntity> mRecentList;
 
 	private int recentNum = 0;
@@ -25,6 +26,8 @@ public class MyApplication extends Application {
 		System.out.println("Myapplication:  " + util.getIp() + " " + util.getPort());
 		client = new Client(util.getIp(), util.getPort());// 从配置文件中读ip和地址
 		System.out.println("Myapplication:  new client ok!");
+		mRecentAdapter = new RecentChatAdapter(getApplicationContext(),
+				mRecentList);
 		mRecentList = new LinkedList<RecentChatEntity>();
 		super.onCreate();
 	}
@@ -71,5 +74,13 @@ public class MyApplication extends Application {
 
 	public void setRecentNum(int recentNum) {
 		this.recentNum = recentNum;
+	}
+
+	public RecentChatAdapter getmRecentAdapter() {
+		return mRecentAdapter;
+	}
+
+	public void setmRecentAdapter(RecentChatAdapter mRecentAdapter) {
+		this.mRecentAdapter = mRecentAdapter;
 	}
 }

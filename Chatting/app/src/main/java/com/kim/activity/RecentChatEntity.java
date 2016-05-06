@@ -2,7 +2,6 @@ package com.kim.activity;
 
 public class RecentChatEntity {
 	private int id;
-	private int img;
 	private int count;
 	private String name;
 	private String time;
@@ -12,11 +11,10 @@ public class RecentChatEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RecentChatEntity(int id, int img, int count, String name,
+	public RecentChatEntity(int id, int count, String name,
 			String time, String msg) {
 		super();
 		this.id = id;
-		this.img = img;
 		this.count = count;
 		this.name = name;
 		this.time = time;
@@ -29,14 +27,6 @@ public class RecentChatEntity {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getImg() {
-		return img;
-	}
-
-	public void setImg(int img) {
-		this.img = img;
 	}
 
 	public int getCount() {
@@ -88,7 +78,7 @@ public class RecentChatEntity {
 
 	@Override
 	public String toString() {
-		return "RecentChatEntity [id=" + id + ", img=" + img + ", count="
+		return "RecentChatEntity [id=" + id +  ", count="
 				+ count + ", name=" + name + ", time=" + time + ", msg=" + msg
 				+ "]";
 	}

@@ -74,7 +74,6 @@ public class UserDaoImpl implements UserDao {
 		String sql = "select * from user where id=?";
 		PreparedStatement ps;
 		try {
-			System.out.println("my suppose id:   " + id);
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();

@@ -1,6 +1,7 @@
 package com.kim.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.kim.common.bean.User;
 import com.kim.util.GroupFriend;
 
 import java.util.List;
@@ -68,24 +70,25 @@ public class FriendAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.name_item);// 显示用户名
         final String name = group.get(groupPosition).getChild(childPosition)
                 .getName();
-        final String id = group.get(groupPosition).getChild(childPosition)
-                .getId()
-                + "";
-
+        final String account = group.get(groupPosition).getChild(childPosition)
+                .getAccount();
+        final int id = group.get(groupPosition).getChild(childPosition)
+                .getId();
         title.setText(name);// 大标题
         convertView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // 下面是切换到聊天界面处理
-                /*User u = new User();
+                User u = new User();
                 u.setName(name);
-                u.setId(Integer.parseInt(id));
-                u.setImg(img);
+                u.setAccount(account);
+                u.setId(id);
+                System.out.println("kimm:  friend chose account:  " + name);
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("user", u);
                 context.startActivity(intent);
-                // Toast.makeText(Tab2.this, "开始聊天", 0).show();*/
+                // Toast.makeText(Tab2.this, "开始聊天", 0).show();
 
             }
         });

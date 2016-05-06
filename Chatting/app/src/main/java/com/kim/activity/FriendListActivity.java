@@ -26,11 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.kim.common.bean.TextMessage;
 import com.kim.common.bean.User;
 import com.kim.common.transObj.TranObject;
 import com.kim.common.utils.Constants;
 import com.kim.util.GroupFriend;
 import com.kim.util.MessageDB;
+import com.kim.util.MyDate;
 import com.kim.util.SharePreferenceUtil;
 import com.kim.util.UserDB;
 
@@ -221,11 +223,9 @@ public class FriendListActivity extends MyActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tab1:
-                System.out.println("点了tab1");
                 mPager.setCurrentItem(PAGE1);// 点击页面1
                 break;
             case R.id.tab2:
-                System.out.println("点了tab2");
                 mPager.setCurrentItem(PAGE2);// 点击页面2
                 break;
             default:
@@ -241,7 +241,6 @@ public class FriendListActivity extends MyActivity implements OnClickListener {
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         if (messageDB != null)
             messageDB.close();
@@ -285,41 +284,36 @@ public class FriendListActivity extends MyActivity implements OnClickListener {
     @Override
     public void getMessage(TranObject msg) {// 重写父类的方法，处理消息
         // TODO Auto-generated method stub
-        /*switch (msg.getType()) {
+        switch (msg.getType()) {
             case MESSAGE:
                 newNum++;
                 application.setRecentNum(newNum);// 保存到全局变量
                 TextMessage tm = (TextMessage) msg.getObject();
                 String message = tm.getMessage();
                 ChatMsgEntity entity = new ChatMsgEntity("", MyDate.getDateEN(),
-                        message, -1, true);// 收到的消息
+                        message, true);// 收到的消息
                 messageDB.saveMsg(msg.getFromUser(), entity);// 保存到数据库
-                Toast.makeText(FriendListActivity.this,
-                        "亲！新消息哦 " + msg.getFromUser() + ":" + message, 0).show();// 提示用户
-                MediaPlayer.create(this, R.raw.msg).start();// 声音提示
                 User user2 = userDB.selectInfo(msg.getFromUser());// 通过id查询对应数据库该好友信息
                 RecentChatEntity entity2 = new RecentChatEntity(msg.getFromUser(),
-                        user2.getImg(), newNum, user2.getName(), MyDate.getDate(),
+                         newNum, user2.getName(), MyDate.getDate(),
                         message);
                 application.getmRecentAdapter().remove(entity2);// 先移除该对象，目的是添加到首部
                 application.getmRecentList().addFirst(entity2);// 再添加到首部
                 application.getmRecentAdapter().notifyDataSetChanged();
                 break;
             case LOGIN:
-                User loginUser = (User) msg.getObject();
-                Toast.makeText(FriendListActivity.this,
-                        "亲！" + loginUser.getId() + "上线了哦", 0).show();
-                MediaPlayer.create(this, R.raw.msg).start();
+                User logUser = (User) msg.getObject();
+
                 break;
-            case LOGOUT:
+            /*case LOGOUT:
                 User logoutUser = (User) msg.getObject();
                 Toast.makeText(FriendListActivity.this,
                         "亲！" + logoutUser.getId() + "下线了哦", 0).show();
                 MediaPlayer.create(this, R.raw.msg).start();
-                break;
+                break;*/
             default:
                 break;
-        }*/
+        }
     }
 
     @Override

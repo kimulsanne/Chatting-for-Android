@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.kim.activity.ChatMsgEntity;
 import com.kim.common.utils.Constants;
 
 import java.util.ArrayList;
@@ -23,14 +24,14 @@ public class MessageDB {
 	public void saveMsg(int id, ChatMsgEntity entity) {
 		db.execSQL("CREATE table IF NOT EXISTS _"
 				+ id
-				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, img TEXT,date TEXT,isCome TEXT,message TEXT)");
+				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, date TEXT,isCome TEXT,message TEXT)");
 		int isCome = 0;
 		if (entity.getMsgType()) {//如果是收到的消息，保存在数据库的值为1
 			isCome = 1;
 		}
 		db.execSQL(
 				"insert into _" + id
-						+ " (name,img,date,isCome,message) values(?,?,?,?,?)",
+						+ " (name,date,isCome,message) values(?,?,?,?)",
 				new Object[] { entity.getName(), entity.getDate(), isCome, entity.getMessage() });
 	}
 
@@ -38,11 +39,10 @@ public class MessageDB {
 		List<ChatMsgEntity> list = new ArrayList<ChatMsgEntity>();
 		db.execSQL("CREATE table IF NOT EXISTS _"
 				+ id
-				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, img TEXT,date TEXT,isCome TEXT,message TEXT)");
+				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, date TEXT,isCome TEXT,message TEXT)");
 		Cursor c = db.rawQuery("SELECT * from _" + id + " ORDER BY _id DESC LIMIT 5", null);
 		while (c.moveToNext()) {
 			String name = c.getString(c.getColumnIndex("name"));
-			int img = c.getInt(c.getColumnIndex("img"));
 			String date = c.getString(c.getColumnIndex("date"));
 			int isCome = c.getInt(c.getColumnIndex("isCome"));
 			String message = c.getString(c.getColumnIndex("message"));

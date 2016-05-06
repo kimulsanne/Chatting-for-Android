@@ -1,4 +1,4 @@
-package com.kim.util;
+package com.kim.activity;
 
 /**
  * 表示一条聊天消息的JavaBean

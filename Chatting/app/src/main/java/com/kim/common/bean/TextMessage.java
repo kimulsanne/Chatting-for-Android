@@ -6,9 +6,7 @@ import java.io.Serializable;
  * 文本消息
  */
 public class TextMessage implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String message;
 
