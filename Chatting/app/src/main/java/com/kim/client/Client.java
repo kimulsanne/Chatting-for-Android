@@ -19,14 +19,12 @@ public class Client {
 		this.port = port;
 	}
 
+	//与服务器建立连接
 	public boolean start() {
 		try {
 			client = new Socket();
-			// client.connect(new InetSocketAddress(Constants.SERVER_IP,
-			// Constants.SERVER_PORT), 3000);
 			client.connect(new InetSocketAddress(ip, port), 3000);
 			if (client.isConnected()) {
-				// System.out.println("Connected..");
 				clientThread = new ClientThread(client);
 				clientThread.start();
 			}
@@ -69,6 +67,7 @@ public class Client {
 		this.port = port;
 	}
 
+	//客户端线程
 	public class ClientThread extends Thread {
 
 		private ClientInputThread in;

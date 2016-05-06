@@ -41,9 +41,6 @@ import java.util.List;
 
 /**
  * 好友列表的Activity
- *
- * @author way
- *
  */
 public class FriendListActivity extends MyActivity implements OnClickListener {
 
@@ -108,7 +105,7 @@ public class FriendListActivity extends MyActivity implements OnClickListener {
         if (manager != null) {
             manager.cancel(Constants.NOTIFY_ID);
             application.setNewMsgNum(0);// 把消息数目置0
-            //application.getmRecentAdapter().notifyDataSetChanged();
+            application.getmRecentAdapter().notifyDataSetChanged();
         }
         super.onResume();
     }
@@ -202,7 +199,7 @@ public class FriendListActivity extends MyActivity implements OnClickListener {
 
         // 下面是最近会话界面处理
         mRecentListView = (ExpandableListView) lay2.findViewById(R.id.tab2_listView);
-        // mRecentAdapter = new RecentChatAdapter(FriendListActivity.this,
+        //mRecentAdapter = new RecentChatAdapter(FriendListActivity.this,
         //application.getmRecentList());// 从全局变量中获取最近聊天对象数组
         // mRecentListView.setAdapter(application.getmRecentAdapter());// 先设置空对象，要么从数据库中读出
 

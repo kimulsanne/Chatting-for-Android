@@ -25,12 +25,7 @@ public class ClientInputThread extends Thread {
 		}
 	}
 
-	/**
-	 * 提供给外部的消息监听方法
-	 * 
-	 * @param messageListener
-	 *            消息监听接口对象
-	 */
+	//提供给外部的消息监听方法
 	public void setMessageListener(MessageListener messageListener) {
 		this.messageListener = messageListener;
 	}
@@ -45,7 +40,6 @@ public class ClientInputThread extends Thread {
 			while (isStart) {
 				msg = (TranObject) ois.readObject();
 				// 每收到一条消息，就调用接口的方法，并传入该消息对象，外部在实现接口的方法时，就可以及时处理传入的消息对象了
-				// 我不知道我有说明白没有？
 				messageListener.Message(msg);
 			}
 			ois.close();

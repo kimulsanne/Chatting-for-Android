@@ -21,6 +21,7 @@ public class MessageDB {
 				Context.MODE_PRIVATE, null);
 	}
 
+	//保存信息
 	public void saveMsg(int id, ChatMsgEntity entity) {
 		db.execSQL("CREATE table IF NOT EXISTS _"
 				+ id
@@ -35,6 +36,7 @@ public class MessageDB {
 				new Object[] { entity.getName(), entity.getDate(), isCome, entity.getMessage() });
 	}
 
+	//获得信息
 	public List<ChatMsgEntity> getMsg(int id) {
 		List<ChatMsgEntity> list = new ArrayList<ChatMsgEntity>();
 		db.execSQL("CREATE table IF NOT EXISTS _"

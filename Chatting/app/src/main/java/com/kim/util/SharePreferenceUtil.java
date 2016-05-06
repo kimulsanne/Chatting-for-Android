@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import com.kim.common.utils.Constants;
 
+/**
+ * 用来存储当前登录的用户的信息
+ */
 public class SharePreferenceUtil {
 	private SharedPreferences sp;
 	private SharedPreferences.Editor editor;
@@ -61,16 +64,6 @@ public class SharePreferenceUtil {
 
 	public void setEmail(String email) {
 		editor.putString("email", email);
-		editor.commit();
-	}
-
-	// 用户自己的头像
-	public Integer getImg() {
-		return sp.getInt("img", 0);
-	}
-
-	public void setImg(int i) {
-		editor.putInt("img", i);
 		editor.commit();
 	}
 

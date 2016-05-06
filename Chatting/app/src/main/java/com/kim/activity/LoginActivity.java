@@ -12,8 +12,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.kim.client.Client;
 import com.kim.client.ClientOutputThread;
@@ -21,6 +21,7 @@ import com.kim.common.bean.User;
 import com.kim.common.transObj.TranObject;
 import com.kim.common.transObj.TranObjectType;
 import com.kim.common.utils.Constants;
+import com.kim.util.DialogFactory;
 import com.kim.util.SharePreferenceUtil;
 import com.kim.util.UserDB;
 
@@ -34,8 +35,8 @@ public class LoginActivity extends MyActivity implements OnClickListener {
     private Button mBtnRegister;
     private Button mBtnLogin;
     private EditText mAccounts, mPassword;
-    private CheckBox mAutoSavePassword;
     private MenuInflater mi;// 菜单
+    private Dialog mDialog = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,26 +51,24 @@ public class LoginActivity extends MyActivity implements OnClickListener {
     }
 
     @Override
-    protected void onResume() {//
+    //先判断网络是否可用，再启动服务
+    protected void onResume() {
         super.onResume();
         final Intent service = new Intent(this, GetMsgService.class);
         new Thread() {
             @Override
             public void run() {
-                System.out.println("Loginactivity:  start resume!!");
-
                 if (isNetworkAvailable()) {
-
-                    System.out.println("Loginactivity:  start service!");
                     startService(service);
                 } else {
-
+                    toast(LoginActivity.this);
                 }
             }
         }.start();
 
     }
 
+    //初始化界面
     public void initView() {
         mBtnRegister = (Button) findViewById(R.id.regist_btn);
         mBtnRegister.setOnClickListener(this);
@@ -81,9 +80,8 @@ public class LoginActivity extends MyActivity implements OnClickListener {
         mPassword = (EditText) findViewById(R.id.login_password);
     }
 
-
+    //点击按钮的函数
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.regist_btn:
                 goRegisterActivity();
@@ -96,22 +94,16 @@ public class LoginActivity extends MyActivity implements OnClickListener {
         }
     }
 
-    /**
-     * 进入注册
-     */
+    //进入注册界面
     public void goRegisterActivity() {
-       /* Intent intent = new Intent();
+        Intent intent = new Intent();
         intent.setClass(this, RegisterActivity.class);
-        startActivity(intent);*/
+        startActivity(intent);
     }
 
-    /**
-     * 点击登录后验证
-     */
-    private Dialog mDialog = null;
-
+    //点击登录后验证
     private void showRequestDialog() {
-     /*   if (mDialog != null) {
+        /*if (mDialog != null) {
             mDialog.dismiss();
             mDialog = null;
         }
@@ -119,41 +111,38 @@ public class LoginActivity extends MyActivity implements OnClickListener {
         mDialog.show();*/
     }
 
-
+    //点击登录后提交请求给服务器
     private void submit() {
         new Thread() {
             @Override
             public void run() {
-                System.out.println("about to send");
+
                 String accounts = mAccounts.getText().toString();
                 String password = mPassword.getText().toString();
                 if (accounts.length() == 0 || password.length() == 0) {
-                    //DialogFactory.ToastDialog(this, "QQ登录", "亲！帐号或密码不能为空哦");
+                    System.out.println("你好蠢");
+                    LoginActivity.this.getMainLooper().prepare();
+                    DialogFactory.ToastDialog(LoginActivity.this, "账号登录", "帐号或密码不能为空!");
+                    LoginActivity.this.getMainLooper().loop();
                 } else {
                     showRequestDialog();
-                    System.out.println("not null");
                     // 通过Socket验证信息
-                    //if (application.isClientStart()) {
-                    if (true) {
-                        System.out.println("start");
+                    if (application.isClientStart()) {
                         Client client = application.getClient();
-                        System.out.println("ip: + " + client.getIp());
-                        System.out.println("port: " + client.getPort());
                         ClientOutputThread out = client.getClientOutputThread();
                         TranObject<User> o = new TranObject<User>(TranObjectType.LOGIN);
                         User u = new User();
                         u.setAccount(accounts);
-                        //u.setPassword(Encode.getEncode("MD5", password));
                         u.setPassword(password);
                         o.setObject(u);
                         out.setMsg(o);
-                        System.out.println("have sent！");
                     } else {
-                        System.out.println("not start");
-                /*if (mDialog.isShowing())
-                    mDialog.dismiss();
-                /*DialogFactory.ToastDialog(LoginActivity.this, "QQ登录",
-                        "亲！服务器暂未开放哦");*/
+                        if ((mDialog != null) && (mDialog.isShowing()))
+                            mDialog.dismiss();
+                        LoginActivity.this.getMainLooper().prepare();
+                        DialogFactory.ToastDialog(LoginActivity.this, "提示",
+                                 "服务器暂未开放!");
+                        LoginActivity.this.getMainLooper().loop();
                     }
                 }
             }
@@ -167,9 +156,8 @@ public class LoginActivity extends MyActivity implements OnClickListener {
 
             switch (msg.getType()) {
                 case LOGIN:// LoginActivity只处理登录的消息
-                    System.out.println("收到  "  + mAccounts.getText().toString() + "的消息!");
                     List<User> list = (List<User>) msg.getObject();
-                    if (list.size() > 0) {
+                    if (list != null && list.size() > 0) {
                         // 保存自己的信息
                         SharePreferenceUtil util = new SharePreferenceUtil(
                                 LoginActivity.this, Constants.SAVE_USER);
@@ -187,11 +175,13 @@ public class LoginActivity extends MyActivity implements OnClickListener {
                                 FriendListActivity.class);
                         i.putExtra(Constants.MSGKEY, msg);
                         startActivity(i);
-
                         finish();
-                        //Toast.makeText(getApplicationContext(), "登录成功", 0).show();
+                        Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
                     } else {
-
+                        DialogFactory.ToastDialog(LoginActivity.this, "登录失败",
+                                "您的帐号或密码错误!");
+                        if (mDialog != null && mDialog.isShowing())
+                            mDialog.dismiss();
                     }
                     break;
                 default:
@@ -216,7 +206,7 @@ public class LoginActivity extends MyActivity implements OnClickListener {
                 setDialog();
                 break;
             case R.id.login_menu_exit:
-                exitDialog(LoginActivity.this, "QQ提示", "亲！您真的要退出吗？");
+                exitDialog(LoginActivity.this, "提示", "亲！您真的要退出吗？");
                 break;
             default:
                 break;
@@ -226,12 +216,12 @@ public class LoginActivity extends MyActivity implements OnClickListener {
 
     @Override
     public void onBackPressed() {// 捕获返回按键
-        exitDialog(LoginActivity.this, "QQ提示", "亲！您真的要退出吗？");
+        exitDialog(LoginActivity.this, "提示", "您真的要退出吗？");
     }
 
 
     private void exitDialog(Context context, String title, String msg) {
-       /* new AlertDialog.Builder(context).setTitle(title).setMessage(msg)
+        new AlertDialog.Builder(context).setTitle(title).setMessage(msg)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -244,7 +234,7 @@ public class LoginActivity extends MyActivity implements OnClickListener {
                         }
                         close();// 调用父类自定义的循环关闭方法
                     }
-                }).setNegativeButton("取消", null).create().show();*/
+                }).setNegativeButton("取消", null).create().show();
     }
 
 
@@ -297,8 +287,8 @@ public class LoginActivity extends MyActivity implements OnClickListener {
 
     private void toast(Context context) {
         new AlertDialog.Builder(context)
-                .setTitle("温馨提示")
-                .setMessage("亲！您的网络连接未打开哦")
+                .setTitle("提示")
+                .setMessage("您的网络连接未打开!")
                 .setPositiveButton("前往打开",
                         new DialogInterface.OnClickListener() {
 

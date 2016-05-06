@@ -77,19 +77,6 @@
         android:layout_marginTop="8.0dip"
         android:layout_weight="1" >
 
-        <CheckBox
-            android:id="@+id/auto_save_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:background="@null"
-            android:button="@null"
-            android:checked="true"
-            android:drawableLeft="@drawable/checkbox_bg1"
-            android:drawablePadding="4.0dip"
-            android:text="@string/auto_save_password"
-            android:textColor="#ffffffff"
-            android:textSize="12.0sp" />
 
         <Button
             android:id="@+id/regist_btn"

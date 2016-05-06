@@ -12,11 +12,9 @@ import com.kim.common.utils.Constants;
 import com.kim.dao.UserDao;
 import com.kim.daoImpl.UserDaoFactory;
 
+
 /**
  * 读消息线程和处理方法
- * 
- * @author way
- * 
  */
 public class InputThread extends Thread {
 	private Socket socket;// socket对象
@@ -60,19 +58,25 @@ public class InputThread extends Thread {
 
 	}
 
-	/**
-	 * 读消息以及处理消息，抛出异常
-	 * 
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
+	//读消息以及处理消息，抛出异常	 
 	public void readMessage() throws IOException, ClassNotFoundException {
 		Object readObject = ois.readObject();// 从流中读取对象
 		UserDao dao = UserDaoFactory.getInstance();// 通过dao模式管理后台
 		if (readObject != null && readObject instanceof TranObject) {
 			TranObject read_tranObject = (TranObject) readObject;// 转换成传输对象
 			switch (read_tranObject.getType()) {
-			
+			case REGISTER:// 如果用户是注册
+				User registerUser = (User) read_tranObject.getObject();
+				int registerResult = dao.register(registerUser);
+				System.out.println(" 新用户注册id:"	+ registerResult);
+				// 给用户回复消息
+				TranObject<User> register2TranObject = new TranObject<User>(
+						TranObjectType.REGISTER);
+				User register2user = new User();
+				register2user.setId(registerResult);
+				register2TranObject.setObject(register2user);
+				out.setMessage(register2TranObject);
+				break;
 			case LOGIN:
 				User loginUser = (User) read_tranObject.getObject();		
 				ArrayList<User> list = dao.login(loginUser);

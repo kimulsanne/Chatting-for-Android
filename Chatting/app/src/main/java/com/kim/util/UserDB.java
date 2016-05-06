@@ -9,7 +9,9 @@ import com.kim.common.bean.User;
 import java.util.ArrayList;
 import java.util.List;
 
-//用来在手机中储存当前登录的用户
+/**
+ * 在手机中储存当前所有在线用户
+ */
 public class UserDB {
 	private DBHelper helper;
 
@@ -17,6 +19,7 @@ public class UserDB {
 		helper = new DBHelper(context);
 	}
 
+	//查找信息
 	public User selectInfo(int account) {
 		User u = new User();
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -29,6 +32,7 @@ public class UserDB {
 		return u;
 	}
 
+	//添加用户
 	public void addUser(List<User> list) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		for (User u : list) {
@@ -39,6 +43,7 @@ public class UserDB {
 		db.close();
 	}
 
+	//更新用户
 	public void updateUser(List<User> list) {
 		if (list.size() > 0) {
 			delete();
@@ -46,6 +51,7 @@ public class UserDB {
 		}
 	}
 
+	//查找用户
 	public List<User> getUser() {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		List<User> list = new ArrayList<User>();
@@ -63,6 +69,7 @@ public class UserDB {
 		return list;
 	}
 
+	//删除表
 	public void delete() {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		db.execSQL("delete from user");

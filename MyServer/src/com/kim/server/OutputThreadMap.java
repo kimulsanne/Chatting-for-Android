@@ -28,8 +28,6 @@ public class OutputThreadMap {
 	// 添加写线程的方法
 	public synchronized void add(Integer id, OutputThread out) {
 		map.put(id, out);
-		System.out.println("map 添加 用户 " + id + " 成功!");
-		System.out.println("map  当前大小：  " + map.size());
 	}
 
 	// 移除写线程的方法

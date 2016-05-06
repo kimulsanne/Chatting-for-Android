@@ -15,10 +15,10 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public int register(User u) {
-		/*int id;
+		int id;
 		Connection con = DButil.connect();
-		String sql1 = "insert into user(_name,_password,_email,_time) values(?,?,?,?)";
-		String sql2 = "select _id from user";
+		String sql1 = "insert into user(name, password, mail,time, account) values(?,?,?,?,?)";
+		String sql2 = "select id from user";
 
 		try {
 			PreparedStatement ps = con.prepareStatement(sql1);
@@ -26,13 +26,13 @@ public class UserDaoImpl implements UserDao {
 			ps.setString(2, u.getPassword());
 			ps.setString(3, u.getEmail());
 			ps.setString(4, "shijian");
+			ps.setString(5, u.getAccount());
 			int res = ps.executeUpdate();
 			if (res > 0) {
 				PreparedStatement ps2 = con.prepareStatement(sql2);
 				ResultSet rs = ps2.executeQuery();
 				if (rs.last()) {
-					id = rs.getInt("_id");
-					createFriendtable(id);
+					id = rs.getInt("id");
 					return id;
 				}
 			}
@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
 			 e.printStackTrace();
 		} finally {
 			DButil.close(con);
-		}*/
+		}
 		return Constants.REGISTER_FAIL;
 	}
 

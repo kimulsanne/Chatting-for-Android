@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int id;// QQ号码
+	private int id;// 用户id
 	private String name;// 昵称
 	private String account;// 账号
 	private String email;// 邮箱

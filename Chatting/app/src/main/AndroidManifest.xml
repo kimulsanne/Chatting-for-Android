@@ -23,6 +23,12 @@
         </activity>
 
         <activity
+            android:name=".RegisterActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateVisible" >
+        </activity>
+
+        <activity
             android:name=".ChatActivity"
             android:windowSoftInputMode="adjustResize" >
         </activity>

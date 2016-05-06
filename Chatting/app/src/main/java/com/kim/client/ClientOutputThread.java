@@ -29,7 +29,7 @@ public class ClientOutputThread extends Thread {
 		this.isStart = isStart;
 	}
 
-	// 这里处理跟服务器是一样的
+	// 设置消息并且唤醒发消息的线程
 	public void setMsg(TranObject msg) {
 		this.msg = msg;
 		synchronized (this) {

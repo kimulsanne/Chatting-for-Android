@@ -48,14 +48,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/tab1" />
+                android:src="@drawable/tab2" />
 
             <ImageView
                 android:id="@+id/tab2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/tab2" />
+                android:src="@drawable/tab3" />
         </LinearLayout>
 
         <ImageView

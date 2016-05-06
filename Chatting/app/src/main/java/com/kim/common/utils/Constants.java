@@ -1,5 +1,8 @@
 package com.kim.common.utils;
 
+/**
+ * 储存常量的工具类
+ */
 public class Constants {
 	public static final String SERVER_IP = "59.78.22.200";// 服务器IP
 	public static final int SERVER_PORT = 9990;// 服务器端口

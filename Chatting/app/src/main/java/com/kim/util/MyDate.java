@@ -2,7 +2,9 @@ package com.kim.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+/**
+ * 转换日期格式的工具
+ */
 public class MyDate {
 	public static String getDateCN() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");

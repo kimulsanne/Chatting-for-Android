@@ -15,7 +15,7 @@ import com.kim.util.GroupFriend;
 import java.util.List;
 
 /**
- * Created by Kim on 2016/5/5.
+ * 用户显示好友列表的适配器
  */
 public class FriendAdapter extends BaseExpandableListAdapter {
     private Context context;

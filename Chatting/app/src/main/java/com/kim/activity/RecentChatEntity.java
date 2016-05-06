@@ -8,7 +8,6 @@ public class RecentChatEntity {
 	private String msg;
 
 	public RecentChatEntity() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public RecentChatEntity(int id, int count, String name,
