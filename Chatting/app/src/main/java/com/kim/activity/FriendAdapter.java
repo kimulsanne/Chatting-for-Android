@@ -38,7 +38,6 @@ public class FriendAdapter extends BaseExpandableListAdapter {
         TextView title = (TextView) convertView.findViewById(R.id.content_001);
         title.setText(getGroup(groupPosition).toString());// 设置大组成员名称
 
-
         return convertView;
     }
 
@@ -56,8 +55,6 @@ public class FriendAdapter extends BaseExpandableListAdapter {
     public int getGroupCount() {
         return group.size();
     }
-
-
 
     // 得到小组成员的view
     public View getChildView(int groupPosition, int childPosition,
@@ -88,7 +85,6 @@ public class FriendAdapter extends BaseExpandableListAdapter {
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("user", u);
                 context.startActivity(intent);
-                // Toast.makeText(Tab2.this, "开始聊天", 0).show();
 
             }
         });

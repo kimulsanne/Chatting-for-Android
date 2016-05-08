@@ -69,9 +69,7 @@ public class ChatActivity extends MyActivity implements OnClickListener {
      * 加载消息历史，从数据库中读出
      */
     public void initData() {
-        System.out.println("kiim 加载历史消息");
         List<ChatMsgEntity> list = messageDB.getMsg(user.getId());
-        System.out.println("kiim 总条数: " + list.size());
         if (list.size() > 0) {
             for (ChatMsgEntity entity : list) {
                 if (entity.getName().equals("")) {
@@ -142,19 +140,12 @@ public class ChatActivity extends MyActivity implements OnClickListener {
                 System.out.println("kiim 发送人: " + util.getId() );
                 out.setMsg(o);
             }
-            // 下面是添加到最近会话列表的处理，在按发送键之后
-            RecentChatEntity entity1 = new RecentChatEntity(user.getId(),
-                     0, user.getName(), MyDate.getDate(),
-                    contString);
-            application.getmRecentList().remove(entity1);
-            application.getmRecentList().addFirst(entity1);
-            application.getmRecentAdapter().notifyDataSetChanged();
+
         }
     }
 
     @Override
     public void getMessage(TranObject msg) {
-        // TODO Auto-generated method stub
         switch (msg.getType()) {
             case MESSAGE:
                 TextMessage tm = (TextMessage) msg.getObject();

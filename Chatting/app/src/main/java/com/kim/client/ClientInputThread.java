@@ -38,7 +38,11 @@ public class ClientInputThread extends Thread {
 	public void run() {
 		try {
 			while (isStart) {
+				int k;
+				System.out.println("kiim before read");
 				msg = (TranObject) ois.readObject();
+				System.out.println("kiim after read");
+				System.out.println("kiim name: " + msg.getObject().getClass().getName());
 				// 每收到一条消息，就调用接口的方法，并传入该消息对象，外部在实现接口的方法时，就可以及时处理传入的消息对象了
 				messageListener.Message(msg);
 			}

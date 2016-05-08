@@ -8,6 +8,6 @@ public interface UserDao {
 	
 	public int register(User u);
 	public ArrayList<User> login(User u);
-	public ArrayList<User> refresh(int id);
+	public ArrayList<User> getFriend(int id);
 	public void logout(int id);
 }

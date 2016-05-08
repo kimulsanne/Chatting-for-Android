@@ -37,9 +37,10 @@ public class UserDB {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		for (User u : list) {
 			db.execSQL(
-					"insert into user (id,account,name,online) values(?,?,?,?)",
-					new Object[] { u.getId(), u.getAccount(),u.getName(),u.getOnline()});
+					"insert into user (id,account,name,tag,online) values(?,?,?,?,?)",
+					new Object[] { u.getId(), u.getAccount(), u.getName(), u.getTag(), u.getOnline()});
 		}
+
 		db.close();
 	}
 
@@ -62,13 +63,34 @@ public class UserDB {
 			u.setName(c.getString(c.getColumnIndex("name")));
 			u.setOnline(c.getInt(c.getColumnIndex("online")));
 			u.setAccount(c.getString(c.getColumnIndex("account")));
-			list.add(u);
+			u.setTag(c.getString(c.getColumnIndex("tag")));
+			if ((u.getOnline() == 0) && (!u.getAccount().equals("--")) )
+				list.add(u);
 		}
 		c.close();
 		db.close();
 		return list;
 	}
 
+	//查找好友
+	public List<User> getFriendUser() {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		List<User> list = new ArrayList<User>();
+		Cursor c = db.rawQuery("select * from user", null);
+		while (c.moveToNext()) {
+			User u = new User();
+			u.setId(c.getInt(c.getColumnIndex("id")));
+			u.setName(c.getString(c.getColumnIndex("name")));
+			u.setOnline(c.getInt(c.getColumnIndex("online")));
+			u.setAccount(c.getString(c.getColumnIndex("account")));
+			u.setTag(c.getString(c.getColumnIndex("tag")));
+			if (u.getAccount().equals("--"))
+				list.add(u);
+		}
+		c.close();
+		db.close();
+		return list;
+	}
 	//删除表
 	public void delete() {
 		SQLiteDatabase db = helper.getWritableDatabase();

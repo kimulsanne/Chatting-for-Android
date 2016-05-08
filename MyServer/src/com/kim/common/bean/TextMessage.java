@@ -3,17 +3,14 @@ package com.kim.common.bean;
 import java.io.Serializable;
 
 /**
- * 文本消息
+ * 文本消息的bean类
  */
 public class TextMessage implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String message;
 
 	public TextMessage() {
-
 	}
 
 	public TextMessage(String message) {

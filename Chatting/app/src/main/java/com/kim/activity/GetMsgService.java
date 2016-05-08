@@ -11,10 +11,13 @@ import android.os.IBinder;
 
 import com.kim.client.Client;
 import com.kim.client.ClientInputThread;
+import com.kim.client.ClientOutputThread;
 import com.kim.client.MessageListener;
+import com.kim.common.bean.User;
 import com.kim.common.transObj.TranObject;
 import com.kim.common.transObj.TranObjectType;
 import com.kim.common.utils.Constants;
+import com.kim.util.MessageDB;
 import com.kim.util.SharePreferenceUtil;
 
 
@@ -30,7 +33,7 @@ public class GetMsgService extends Service {
 	private Notification mNotification;
 	private Context mContext = this;
 	private SharePreferenceUtil util;
-	//private MessageDB messageDB;
+	private MessageDB messageDB;
 	// 收到用户按返回键发出的广播，就显示通知栏
 	private BroadcastReceiver backKeyReceiver = new BroadcastReceiver() {
 
@@ -152,29 +155,32 @@ public class GetMsgService extends Service {
 
 	}
 
-	/*@Override
+	@Override
 	// 在服务被摧毁时，做一些事情
-	public void onDestroy() {
+	public synchronized void onDestroy() {
+		System.out.println("kiim ser 准备关闭服务");
 		super.onDestroy();
 		if (messageDB != null)
 			messageDB.close();
 		unregisterReceiver(backKeyReceiver);
 		mNotificationManager.cancel(Constants.NOTIFY_ID);
 		// 给服务器发送下线消息
+		System.out.println(util.getName() + " about to stop");
 		if (isStart) {
 			ClientOutputThread out = client.getClientOutputThread();
 			TranObject<User> o = new TranObject<User>(TranObjectType.LOGOUT);
 			User u = new User();
-			u.setId(Integer.parseInt(util.getId()));
+			u.setId(util.getId());
 			o.setObject(u);
+			System.out.println(util.getName() + "kiim about to send logout msg");
 			out.setMsg(o);
 			// 发送完之后，关闭client
-			out.setStart(false);
 			client.getClientInputThread().setStart(false);
+			out.setStart(false);
+			System.out.println(util.getName() + "kiim have sent logout msg");
+			//
 		}
-		// Intent intent = new Intent(this, GetMsgService.class);
-		// startService(intent);
-	}*/
+	}
 
 	/**
 	 * 创建通知

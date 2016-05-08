@@ -8,9 +8,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-
+/**
+ * 数据库工具类
+ */
 public class DButil {
 
+	//建立连接
 	public static Connection connect() {
 		Properties pro = new Properties();
 		String driver = null;
@@ -43,6 +46,7 @@ public class DButil {
 		return null;
 	}
 
+	//关闭连接
 	public static void close(Connection con) {
 		if (con != null) {
 			try {

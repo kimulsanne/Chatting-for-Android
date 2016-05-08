@@ -17,7 +17,7 @@ public class UserDaoImpl implements UserDao {
 	public int register(User u) {
 		int id;
 		Connection con = DButil.connect();
-		String sql1 = "insert into user(name, password, mail,time, account) values(?,?,?,?,?)";
+		String sql1 = "insert into user(name, password, mail,time, account, tag, online) values(?,?,?,?,?,?,?)";
 		String sql2 = "select id from user";
 
 		try {
@@ -27,6 +27,8 @@ public class UserDaoImpl implements UserDao {
 			ps.setString(3, u.getEmail());
 			ps.setString(4, "shijian");
 			ps.setString(5, u.getAccount());
+			ps.setString(6, u.getTag());
+			ps.setInt(7, 1);
 			int res = ps.executeUpdate();
 			if (res > 0) {
 				PreparedStatement ps2 = con.prepareStatement(sql2);
@@ -56,7 +58,7 @@ public class UserDaoImpl implements UserDao {
 			if (rs.first()) {
 				int id = rs.getInt("id");
 				setOnline(id);
-				ArrayList<User> refreshList = refresh(id);
+				ArrayList<User> refreshList = getFriend(id);
 				return refreshList;
 			}
 		} catch (SQLException e) {
@@ -82,6 +84,8 @@ public class UserDaoImpl implements UserDao {
 				me.setEmail(rs.getString("mail"));			
 				me.setName(rs.getString("name"));				
 				me.setOnline(rs.getInt("online"));
+				me.setAccount("--");
+				me.setTag(rs.getString("tag"));
 			}
 
 			return me;
@@ -93,13 +97,13 @@ public class UserDaoImpl implements UserDao {
 		return null;
 	}
 
-	
+	/*
 	public ArrayList<User> refresh(int id) {
 		ArrayList<User> list = new ArrayList<User>();
 		User me = findMe(id);
 		list.add(me);
 		Connection con = DButil.connect();
-		String sql = "select * from user";
+		String sql = "select * from user where online=0";
 		PreparedStatement ps;
 		try {
 			ps = con.prepareStatement(sql);
@@ -112,6 +116,7 @@ public class UserDaoImpl implements UserDao {
 					friend.setName(rs.getString("name"));
 					friend.setOnline(rs.getInt("online"));		
 					friend.setAccount(rs.getString("account"));
+					friend.setTag(rs.getString("tag"));
 					if (friend.getId() != id)
 						list.add(friend);
 					
@@ -126,11 +131,20 @@ public class UserDaoImpl implements UserDao {
 		}
 		return null;
 	}
-
+*/
 	@Override
 	public void logout(int id) {
-		// TODO Auto-generated method stub
-		
+		Connection con = DButil.connect();
+		try {
+			String sql = "update user set online=1 where id=?";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+		} finally {
+			DButil.close(con);
+		}
 	}
 
 
@@ -141,12 +155,105 @@ public class UserDaoImpl implements UserDao {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
 			ps.executeUpdate();
-			//updateAllOn(id);// 
+
 		} catch (SQLException e) {
 			// e.printStackTrace();
 		} finally {
 			DButil.close(con);
 		}
+	}
+
+	/*
+	//添加所有的好友
+	public ArrayList<User> addFriend(ArrayList<User> list) {
+		int id = list.get(0).getId();
+		Connection con = DButil.connect();
+		String sql = "select * from friendlist where uid=?";
+		PreparedStatement ps;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery(); 
+			if (rs.first()) {
+				do {
+					User friend = new User();
+					friend.setId(rs.getInt("id"));
+					friend.setName(rs.getString("name"));
+					friend.setOnline(rs.getInt("online"));		
+					friend.setAccount("--");	//表明他是好友
+					friend.setTag(rs.getString("tag"));
+					if (friend.getId() != id)
+						list.add(friend);
+					
+				} while (rs.next());
+			}
+			return list;
+		} catch (SQLException e) {
+			
+		} finally {
+			DButil.close(con);
+		}
+		return null;
+	}*/
+	
+	@Override
+	public ArrayList<User> getFriend(int id) {
+		ArrayList<User> list = new ArrayList<User>();
+		User me = findMe(id);
+		list.add(me);
+		Connection con = DButil.connect();
+		String sql = "select * from user where online=0";
+		String sql2 = "select * from friendlist where uid=?";
+		String sql3 = "select * from user where id=?";
+		PreparedStatement ps, ps2;
+		try {
+			ps = con.prepareStatement(sql);			
+			ResultSet rs = ps.executeQuery();
+			if (rs.first()) {
+				do {
+					User friend = new User();
+					friend.setId(rs.getInt("id"));
+					friend.setName(rs.getString("name"));
+					friend.setOnline(rs.getInt("online"));		
+					friend.setAccount(rs.getString("account"));
+					friend.setTag(rs.getString("tag"));
+					if (friend.getId() != id)
+						list.add(friend);
+					
+				} while (rs.next());
+			}
+			ps = con.prepareStatement(sql2);
+			ps.setInt(1, id);
+			rs = ps.executeQuery(); 
+			if (rs.first()) {
+				do {
+					ps2 = con.prepareStatement(sql3);
+					ps2.setInt(1, rs.getInt("fid"));
+					ResultSet rs2 = ps2.executeQuery();
+					if (rs2.first()) {
+						do {
+							User friend = new User();				
+							rs2.first();
+							friend.setId(rs2.getInt("id"));
+							friend.setName(rs2.getString("name"));
+							friend.setOnline(rs2.getInt("online"));		
+							friend.setAccount("--");	//表明他是好友
+							friend.setTag(rs2.getString("tag"));
+							if (friend.getId() != id)
+								list.add(friend);
+						
+						} while (rs2.next());							
+					}	
+				} while (rs.next());
+			}
+
+			return list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(con);
+		}
+		return null;
 	}
 
 /*

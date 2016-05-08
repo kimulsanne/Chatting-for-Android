@@ -13,9 +13,10 @@ public class User implements Serializable {
 	private String account;// 账号
 	private String email;// 邮箱
 	private String password;// 密码
+	private String tag;// 标签
 	private int online;// 是否在线
-	private String ip;
-	private int port;
+	private String ip;// ip
+	private int port;// 端口
 
 	public int getId() {
 		return id;
@@ -81,6 +82,14 @@ public class User implements Serializable {
 		this.online = online;
 	}
 
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof User) {
@@ -96,8 +105,8 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email
-				+ ", password=" + password + ", ip=" + ip
+		return "User [id=" + id + ", name=" + name + ", account=" + account + ", online=" + online +", email=" + email
+				+ ", password=" + password + ", tag=" + tag + ", ip=" + ip
 				+ ", port=" + port + "]";
 	}
 

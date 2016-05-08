@@ -101,16 +101,6 @@ public class LoginActivity extends MyActivity implements OnClickListener {
         startActivity(intent);
     }
 
-    //点击登录后验证
-    private void showRequestDialog() {
-        /*if (mDialog != null) {
-            mDialog.dismiss();
-            mDialog = null;
-        }
-        mDialog = DialogFactory.creatRequestDialog(this, "正在验证账号...");
-        mDialog.show();*/
-    }
-
     //点击登录后提交请求给服务器
     private void submit() {
         new Thread() {
@@ -120,12 +110,10 @@ public class LoginActivity extends MyActivity implements OnClickListener {
                 String accounts = mAccounts.getText().toString();
                 String password = mPassword.getText().toString();
                 if (accounts.length() == 0 || password.length() == 0) {
-                    System.out.println("你好蠢");
                     LoginActivity.this.getMainLooper().prepare();
                     DialogFactory.ToastDialog(LoginActivity.this, "账号登录", "帐号或密码不能为空!");
                     LoginActivity.this.getMainLooper().loop();
                 } else {
-                    showRequestDialog();
                     // 通过Socket验证信息
                     if (application.isClientStart()) {
                         Client client = application.getClient();
@@ -166,11 +154,12 @@ public class LoginActivity extends MyActivity implements OnClickListener {
                         util.setId(list.get(0).getId());
                         util.setEmail(list.get(0).getEmail());
                         util.setName(list.get(0).getName());
-
+                        System.out.println("kiim login size: " + list.size());
+                        System.out.println("kiim login user: " + list.get(0));
                         //保存所有在线用户的信息
                         UserDB db = new UserDB(LoginActivity.this);
                         db.addUser(list);
-
+                        System.out.println("kiim login addok " );
                         Intent i = new Intent(LoginActivity.this,
                                 FriendListActivity.class);
                         i.putExtra(Constants.MSGKEY, msg);

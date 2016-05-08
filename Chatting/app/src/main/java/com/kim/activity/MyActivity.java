@@ -19,7 +19,6 @@ public abstract class MyActivity extends Activity {
             TranObject msg = (TranObject) intent
                     .getSerializableExtra(Constants.MSGKEY);
             if (msg != null) {
-                // System.out.println("MyActivity:" + msg);
                 getMessage(msg);
             } else {
                 close();

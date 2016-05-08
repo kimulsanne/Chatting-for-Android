@@ -10,9 +10,6 @@ import com.kim.*;
 import com.kim.common.utils.Constants;
 /**
  * 服务器，接受用户登录、离线、转发消息
- * 
- * @author way
- * 
  */
 public class Server {
 	private ExecutorService executorService;// 线程池
@@ -76,9 +73,6 @@ public class Server {
 		}
 	}
 
-	/**
-	 * 退出
-	 */
 	public void quit() {
 		try {
 			this.isStarted = false;

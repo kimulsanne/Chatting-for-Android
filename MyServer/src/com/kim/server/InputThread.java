@@ -8,9 +8,9 @@ import java.util.List;
 
 import com.kim.common.bean.*;
 import com.kim.common.transObj.*;
-import com.kim.common.utils.Constants;
 import com.kim.dao.UserDao;
 import com.kim.daoImpl.UserDaoFactory;
+
 
 
 /**
@@ -79,7 +79,7 @@ public class InputThread extends Thread {
 				break;
 			case LOGIN:
 				User loginUser = (User) read_tranObject.getObject();		
-				ArrayList<User> list = dao.login(loginUser);
+				ArrayList<User> list = dao.login(loginUser);				
 				TranObject<ArrayList<User>> login2Object = new TranObject<ArrayList<User>>(
 						TranObjectType.LOGIN);
 				if (list != null) {// 如果登录成功
@@ -91,18 +91,14 @@ public class InputThread extends Thread {
 					for (OutputThread onOut : map.getAll()) {
 						onOut.setMessage(onObject);// 广播一下用户上线
 					}
-					map.add(list.get(0).getId(), out);// 先广播，再把对应用户id的写线程存入map中
-					 
-					
+					map.add(list.get(0).getId(), out);// 先广播，再把对应用户id的写线程存入map中					
+					System.out.println(" 用户："
+						+ loginUser.getAccount() + " 上线了");				
 					login2Object.setObject(list);// 把好友列表加入回复的对象中
 				} else {
 					login2Object.setObject(null);
 				}
-
 				out.setMessage(login2Object);// 同时把登录信息回复给用户
-					
-				System.out.println(" 用户："
-						+ loginUser.getAccount() + " 上线了");
 				break;
 
 			case MESSAGE:// 如果是转发消息（可添加群发）
@@ -123,6 +119,31 @@ public class InputThread extends Thread {
 					offText.setFromUser(0);
 					out.setMessage(offText);*/
 				}
+				break;
+			case REFRESH:
+				System.out.println("收到 " + read_tranObject.getFromUser() +" 发送的刷新消息！");
+				List<User> refreshList = dao.getFriend(read_tranObject
+						.getFromUser());						
+				TranObject<List<User>> refreshO = new TranObject<List<User>>(
+						TranObjectType.REFRESH);
+				refreshO.setObject(refreshList);
+				out.setMessage(refreshO);
+				break;
+			case LOGOUT:// 如果是退出，更新数据库在线状态，同时群发告诉所有在线用户
+				User logoutUser = (User) read_tranObject.getObject();
+				int offId = logoutUser.getId();
+				System.out.println(" 用户：" + offId + " 下线了");
+				dao.logout(offId);
+				isStart = false;// 结束自己的读循环
+				map.remove(offId);// 从缓存的线程中移除
+				out.setMessage(null);// 先要设置一个空消息去唤醒写线程
+				out.setStart(false);// 再结束写线程循环
+
+				TranObject<User> offObject = new TranObject<User>(
+						TranObjectType.LOGOUT);
+				User logout2User = new User();
+				logout2User.setId(logoutUser.getId());
+				offObject.setObject(logout2User);
 				break;
 			default:
 				break;
